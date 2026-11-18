@@ -1,25 +1,60 @@
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 
-#include "vector.h"
+#include "math/vector.h"
 
-TEST_CASE("Vector addition") {
-    const Vector first{1.0f, 2.0f, 3.0f};
-    const Vector second{4.0f, 5.0f, 6.0f};
+using Catch::Matchers::WithinAbs;
 
-    const Vector result = first + second;
+const double tolerance = 1e-9;
 
-    REQUIRE(result.x() == 5.0f);
-    REQUIRE(result.y() == 7.0f);
-    REQUIRE(result.z() == 9.0f);
+static void requireVectorsEqual(const Vector &actual, const Vector &expected)
+{
+    REQUIRE_THAT(actual.x(), WithinAbs(expected.x(), tolerance));
+    REQUIRE_THAT(actual.y(), WithinAbs(expected.y(), tolerance));
+    REQUIRE_THAT(actual.z(), WithinAbs(expected.z(), tolerance));
 }
 
-TEST_CASE("Vector subtraction") {
-    const Vector first{-1.0f, 4.0f, 0.0f};
-    const Vector second{-5.0f, 2.0f, 1.0f};
+TEST_CASE("a + b adds each component", "[vector]")
+{
+    requireVectorsEqual(Vector(3, 4, 0) + Vector(4, -3, 0), Vector(7, 1, 0));
+    requireVectorsEqual(Vector(3, 4, 1) + Vector(4, -3, 2), Vector(7, 1, 3));
+}
 
-    const Vector result = first - second;
+TEST_CASE("a - b subtracts each component", "[vector]")
+{
+    requireVectorsEqual(Vector(4, 5, 0) - Vector(1, 1, 0), Vector(3, 4, 0));
+    requireVectorsEqual(Vector(4, 5, 6) - Vector(1, 1, 2), Vector(3, 4, 4));
+}
 
-    REQUIRE(result.x() == 4.0f);
-    REQUIRE(result.y() == 2.0f);
-    REQUIRE(result.z() == -1.0f);
+TEST_CASE("t * v scales each component", "[vector]")
+{
+    requireVectorsEqual(2.0 * Vector(3, -4, 1), Vector(6, -8, 2));
+}
+
+TEST_CASE("O + t * D gives the point on the ray at t", "[vector]")
+{
+    Vector O(0, 8, 0);
+    Vector D(3, -4, 0);
+    double t = 2;
+
+    requireVectorsEqual(O + t * D, Vector(6, 0, 0));
+}
+
+TEST_CASE("dot multiplies in pairs, then adds", "[vector]")
+{
+    REQUIRE(Vector(3, 4, 0).dot(Vector(4, 3, 0)) == 24);
+    REQUIRE(Vector(3, 4, 0).dot(Vector(4, -3, 0)) == 0);
+    REQUIRE(Vector(3, 4, 12).dot(Vector(4, 3, 1)) == 36);
+}
+
+TEST_CASE("length follows Pythagoras", "[vector]")
+{
+    REQUIRE(Vector(3, -4, 0).length() == 5);
+    REQUIRE(Vector(3, 4, 12).length() == 13);
+}
+
+TEST_CASE("normalised keeps the direction and gives length 1", "[vector]")
+{
+    requireVectorsEqual(Vector(3, -4, 0).normalised(), Vector(0.6, -0.8, 0));
+    REQUIRE_THAT(Vector(3, 4, 12).normalised().length(), WithinAbs(1, tolerance));
 }

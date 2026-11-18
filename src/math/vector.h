@@ -1,19 +1,25 @@
 #pragma once
 
-class Vector {
+class Vector
+{
 public:
-    Vector() = default;
-    Vector(float x, float y, float z);
+    Vector(double x, double y, double z);
 
-    Vector operator+(const Vector& other) const;
-    Vector operator-(const Vector& other) const;
+    double x() const;
+    double y() const;
+    double z() const;
 
-    float x() const;
-    float y() const;
-    float z() const;
+    Vector operator+(const Vector &other) const;
+    Vector operator-(const Vector &other) const;
+
+    double dot(const Vector &other) const;
+    double length() const;
+    Vector normalised() const;
 
 private:
-    float _x = 0.0f;
-    float _y = 0.0f;
-    float _z = 0.0f;
+    double _x;
+    double _y;
+    double _z;
 };
+
+Vector operator*(double t, const Vector &v);
