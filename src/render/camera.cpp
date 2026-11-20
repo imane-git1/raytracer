@@ -1,4 +1,5 @@
 #include "render/camera.h"
+#include "render/trace.h"
 
 #include <cmath>
 #include <stdexcept>
@@ -17,11 +18,6 @@ const Vector &Camera::position() const
     return _position;
 }
 
-Ray Camera::rayThroughCentre() const
-{
-    return Ray(_position, Vector(0.0, 0.0, 1.0));
-}
-
 Ray Camera::rayThroughPixel(int column, int row, int imageWidth, int imageHeight) const
 {
     if (imageWidth <= 0 || imageHeight <= 0)
@@ -38,4 +34,20 @@ Ray Camera::rayThroughPixel(int column, int row, int imageWidth, int imageHeight
     double screenY = (0.5 - (row + 0.5) / imageHeight) * screenHeight;
 
     return Ray(_position, Vector(screenX, screenY, 1.0));
+}
+
+Image Camera::render(const Sphere &sphere, int width, int height) const
+{
+    Image image(width, height);
+
+    for (int row = 0; row < height; ++row)
+    {
+        for (int column = 0; column < width; ++column)
+        {
+            Ray ray = rayThroughPixel(column, row, width, height);
+            image.setPixel(column, row, trace(ray, sphere));
+        }
+    }
+
+    return image;
 }

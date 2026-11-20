@@ -12,6 +12,8 @@ add_library(raytracer_core
   src/render/camera.cpp
   src/render/trace.cpp
   src/colour/colour.cpp
+  src/image/image.cpp
+  src/io/png_saver.cpp
 )
 target_include_directories(raytracer_core PUBLIC src)
 
@@ -21,6 +23,16 @@ target_link_libraries(raytracer PRIVATE raytracer_core)
 
 # Testing
 include(FetchContent)
+FetchContent_Declare(
+  lodepng
+  GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
+  GIT_TAG        7b2893e35891c0c85bee5595caafaf3c2044b409
+)
+FetchContent_MakeAvailable(lodepng)
+add_library(lodepng STATIC ${lodepng_SOURCE_DIR}/lodepng.cpp)
+target_include_directories(lodepng PUBLIC ${lodepng_SOURCE_DIR})
+target_link_libraries(raytracer_core PRIVATE lodepng)
+
 FetchContent_Declare(
   Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
@@ -36,12 +48,14 @@ add_executable(raytracer_tests
   tests/colour/test_colour.cpp
   tests/geometry/test_ray.cpp
   tests/geometry/test_sphere.cpp
+  tests/image/test_image.cpp
+  tests/image/test_png_saver.cpp
   tests/math/test_vector.cpp
   tests/render/test_camera.cpp
   tests/render/test_trace.cpp
 )
-target_include_directories(raytracer_tests PRIVATE tests)
-target_link_libraries(raytracer_tests PRIVATE raytracer_core Catch2::Catch2WithMain)
+target_include_directories(raytracer_tests PRIVATE tests ${lodepng_SOURCE_DIR})
+target_link_libraries(raytracer_tests PRIVATE raytracer_core Catch2::Catch2WithMain lodepng)
 
 include(CTest)
 include(Catch)
