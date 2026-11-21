@@ -10,7 +10,7 @@ A colour and a vector are both three numbers. We had to decide whether `Colour` 
 
 ## Decision
 
-`Colour` is its own class, with `r()`, `g()` and `b()`, each between 0 and 1. It does not reuse `Vector`.
+`Colour` is its own class, with `r()`, `g()` and `b()`. By convention each is between 0 and 1; the code does not check it. It does not reuse `Vector`.
 
 ## Alternatives
 
@@ -21,3 +21,4 @@ Reusing `Vector` for colours: it saves a class, but a colour would then have `x(
 - The compiler rejects a mix-up between a position and a colour.
 - Colour operations (such as scaling by a brightness) can evolve without touching `Vector`.
 - Some code looks similar in both classes.
+- The 0 to 1 range is a convention, not enforced by the code. Enforcing it is left for later.
