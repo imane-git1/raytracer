@@ -63,3 +63,15 @@ Never write production code and tests in the same step (unless the human explici
   - **Self-intersection bias (`t_min`):** Enforce `t > t_min` (e.g., `1e-4`) on ray hits to prevent shadow/reflection acne.
   - **Integer division:** Cast `int` to `double` before dividing (`static_cast<double>(width)`).
   - **Operators:** Overload `+`, `-`, `*` only when unambiguous (`origin + t * direction`); use named methods for `dot()` and `cross()`.
+
+## Source layout
+
+New classes go in the folder of their concept under `src/` (`math`, `colour`, `geometry`, `material`, `scene`, `render`, `image`, `io`). Their tests go in the matching folder under `tests/`. Includes start from `src/`, for example `#include "math/vector.h"`. See ADR 0008.
+
+## How we work
+
+- Test-driven development: write the test first, see it fail for the right reason, then make it pass.
+- Expected values come from the maths. Ask before changing an expected value in a test.
+- One small step at a time. Change only what the current step requires.
+- Simple C++: no feature that the current step does not need.
+- Build and run only in the dev container, never on the host.
