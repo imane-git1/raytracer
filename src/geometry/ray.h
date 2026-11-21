@@ -7,8 +7,9 @@ class Ray
 public:
     Ray(const Vector &origin, const Vector &direction);
 
-    const Vector &origin() const;
-    const Vector &direction() const;
+    [[nodiscard]] const Vector &origin() const;
+    [[nodiscard]] const Vector &direction() const;
+    [[nodiscard]] Vector at(double t) const;
 
 private:
     Vector _origin;

@@ -5,16 +5,16 @@ class Vector
 public:
     Vector(double x, double y, double z);
 
-    double x() const;
-    double y() const;
-    double z() const;
+    [[nodiscard]] double x() const;
+    [[nodiscard]] double y() const;
+    [[nodiscard]] double z() const;
 
-    Vector operator+(const Vector &other) const;
-    Vector operator-(const Vector &other) const;
+    [[nodiscard]] Vector operator+(const Vector &other) const;
+    [[nodiscard]] Vector operator-(const Vector &other) const;
 
-    double dot(const Vector &other) const;
-    double length() const;
-    Vector normalised() const;
+    [[nodiscard]] double dot(const Vector &other) const;
+    [[nodiscard]] double length() const;
+    [[nodiscard]] Vector normalised() const;
 
 private:
     double _x;
@@ -22,4 +22,4 @@ private:
     double _z;
 };
 
-Vector operator*(double t, const Vector &v);
+[[nodiscard]] Vector operator*(double t, const Vector &v);

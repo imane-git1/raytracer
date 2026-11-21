@@ -36,7 +36,7 @@ Ray Camera::rayThroughPixel(int column, int row, int imageWidth, int imageHeight
     return Ray(_position, Vector(screenX, screenY, 1.0));
 }
 
-Image Camera::render(const Sphere &sphere, int width, int height) const
+Image Camera::render(const Scene &scene, int width, int height) const
 {
     Image image(width, height);
 
@@ -45,7 +45,7 @@ Image Camera::render(const Sphere &sphere, int width, int height) const
         for (int column = 0; column < width; ++column)
         {
             Ray ray = rayThroughPixel(column, row, width, height);
-            image.setPixel(column, row, trace(ray, sphere));
+            image.setPixel(column, row, trace(ray, scene));
         }
     }
 

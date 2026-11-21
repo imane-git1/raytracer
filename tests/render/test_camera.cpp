@@ -9,8 +9,12 @@
 #include "image/image.h"
 #include "colour/colour.h"
 #include "math/vector.h"
+#include "material/material.h"
 #include "render/camera.h"
+#include "scene/scene.h"
 #include "test_helpers.h"
+
+#include <memory>
 
 TEST_CASE("a camera gives back its position", "[camera]")
 {
@@ -80,14 +84,16 @@ TEST_CASE("a camera rejects a non-positive screen width", "[camera]")
 TEST_CASE("a 5 by 3 render of a sphere draws a red plus", "[camera]")
 {
   Camera camera(Vector(0, 0, -1), 5.0);
-  Sphere sphere(Vector(0, 0, 6), 5.0, Colour(1, 0, 0));
+  Scene scene(Vector(0, 0, -1));
+  scene.add(std::make_unique<Sphere>(
+      Vector(0, 0, 6), 5.0, Material(Colour(1, 0, 0))));
 
-  Image image = camera.render(sphere, 5, 3);
+  Image image = camera.render(scene, 5, 3);
 
   const double expectedRed[3][5] = {
-      {0, 0, 1, 0, 0},
-      {0, 1, 1, 1, 0},
-      {0, 0, 1, 0, 0},
+      {0, 0, 0.8, 0, 0},
+      {0, 0.8, 1, 0.8, 0},
+      {0, 0, 0.8, 0, 0},
   };
   for (int row = 0; row < 3; ++row)
   {

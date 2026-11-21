@@ -9,6 +9,9 @@ add_library(raytracer_core
   src/math/vector.cpp
   src/geometry/ray.cpp
   src/geometry/sphere.cpp
+  src/geometry/plane.cpp
+  src/scene/scene.cpp
+  src/material/material.cpp
   src/render/camera.cpp
   src/render/trace.cpp
   src/colour/colour.cpp
@@ -46,8 +49,11 @@ add_executable(raytracer_tests
   tests/test_helpers.cpp
   tests/test_main.cpp
   tests/colour/test_colour.cpp
+  tests/material/test_material.cpp
   tests/geometry/test_ray.cpp
   tests/geometry/test_sphere.cpp
+  tests/geometry/test_plane.cpp
+  tests/scene/test_scene.cpp
   tests/image/test_image.cpp
   tests/image/test_png_saver.cpp
   tests/math/test_vector.cpp

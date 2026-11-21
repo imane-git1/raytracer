@@ -10,11 +10,11 @@ class Image
 public:
     Image(unsigned int width, unsigned int height);
 
-    unsigned int width() const;
-    unsigned int height() const;
+    [[nodiscard]] unsigned int width() const;
+    [[nodiscard]] unsigned int height() const;
 
     void setPixel(unsigned int column, unsigned int row, const Colour &colour);
-    const Colour &pixel(unsigned int column, unsigned int row) const;
+    [[nodiscard]] const Colour &pixel(unsigned int column, unsigned int row) const;
 
 private:
     std::size_t index(unsigned int column, unsigned int row) const;
